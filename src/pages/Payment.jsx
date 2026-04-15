@@ -1,32 +1,32 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function Payment() {
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const total = location.state?.total || 0;
+  const [loading, setLoading] = useState(false);
 
   const handlePayment = () => {
-    
-    navigate("/success");
+    setLoading(true);
+
+    setTimeout(() => {
+      window.location.href = "/success";
+    }, 2000); // simulate payment
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px", textAlign: "center" }}>
       <h1>Payment Page 💳</h1>
-      <h2>Total Amount: ₹{total}</h2>
 
       <button
         onClick={handlePayment}
         style={{
-          padding: "10px",
+          padding: "15px 30px",
           background: "blue",
           color: "white",
           border: "none",
           cursor: "pointer",
+          fontSize: "18px",
         }}
       >
-        Pay Now
+        {loading ? "Processing..." : "Pay Now"}
       </button>
     </div>
   );

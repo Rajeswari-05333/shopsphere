@@ -142,14 +142,8 @@ app.delete("/clear-cart", async (req, res) => {
 app.put("/cart/:id", async (req, res) => {
   try {
     const { quantity } = req.body;
-
-    const updatedItem = await Cart.findByIdAndUpdate(
-      req.params.id,
-      { quantity },
-      { new: true }
-    );
-
-    res.json(updatedItem);
+    await Cart.findByIdAndUpdate(req.params.id, { quantity });
+    res.send("Quantity updated ✅");
   } catch (error) {
     res.status(500).send(error);
   }
