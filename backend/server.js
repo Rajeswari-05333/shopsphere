@@ -138,6 +138,23 @@ app.delete("/clear-cart", async (req, res) => {
   }
 });
 
+// Update Quantity
+app.put("/cart/:id", async (req, res) => {
+  try {
+    const { quantity } = req.body;
+
+    const updatedItem = await Cart.findByIdAndUpdate(
+      req.params.id,
+      { quantity },
+      { new: true }
+    );
+
+    res.json(updatedItem);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

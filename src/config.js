@@ -1,5 +1,3 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
-
-console.log("BASE_URL:", BASE_URL); 
+const BASE_URL ="https://shop-sphere-backend-qyld.onrender.com";
 
 export default BASE_URL;
