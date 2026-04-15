@@ -4,15 +4,31 @@ import BASE_URL from "../config";
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
 
-  useEffect(() => {
+  const fetchCart = () => {
     fetch(`${BASE_URL}/cart`)
       .then((res) => res.json())
-      .then((data) => {
-        console.log("Cart Data:", data);
-        setCartItems(data);
-      })
+      .then((data) => setCartItems(data))
       .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    fetchCart();
   }, []);
+
+  // 🔥 UPDATE QUANTITY FUNCTION
+  const updateQuantity = async (id, newQty) => {
+    if (newQty < 1) return;
+
+    await fetch(`${BASE_URL}/cart/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ quantity: newQty }),
+    });
+
+    fetchCart(); // refresh UI
+  };
 
   return (
     <div style={{ padding: "20px" }}>
@@ -33,7 +49,19 @@ function Cart() {
             <img src={item.image} width="100" />
             <h3>{item.name}</h3>
             <p>₹{item.price}</p>
-            <p>Qty: {item.quantity}</p>
+
+            {/* 🔥 QUANTITY CONTROLS */}
+            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+              <button onClick={() => updateQuantity(item._id, item.quantity - 1)}>
+                ➖
+              </button>
+
+              <span>{item.quantity}</span>
+
+              <button onClick={() => updateQuantity(item._id, item.quantity + 1)}>
+                ➕
+              </button>
+            </div>
           </div>
         ))
       )}

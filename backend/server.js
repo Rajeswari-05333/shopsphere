@@ -101,11 +101,11 @@ app.get("/test-cart", async (req, res) => {
   res.send("Cart saved ✅");
 });
 
+// ❌ Remove item from cart
 app.delete("/cart/:id", async (req, res) => {
   try {
-    const { id } = req.params;
-    await Cart.findByIdAndDelete(id);
-    res.send("Item removed ✅");
+    await Cart.findByIdAndDelete(req.params.id);
+    res.send("Item removed from cart ✅");
   } catch (error) {
     res.status(500).send(error);
   }
