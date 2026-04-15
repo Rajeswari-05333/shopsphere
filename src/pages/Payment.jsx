@@ -1,24 +1,33 @@
-import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Payment() {
-  const [method, setMethod] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const total = location.state?.total || 0;
+
+  const handlePayment = () => {
+    
+    navigate("/success");
+  };
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Payment</h2>
+      <h1>Payment Page 💳</h1>
+      <h2>Total Amount: ₹{total}</h2>
 
-      <select onChange={(e) => setMethod(e.target.value)}>
-        <option value="">Select Payment Method</option>
-        <option value="upi">UPI</option>
-        <option value="card">Credit/Debit Card</option>
-        <option value="cod">Cash on Delivery</option>
-      </select>
-
-      <br /><br />
-
-      <a href="/success">
-        <button disabled={!method}>Confirm Payment</button>
-      </a>
+      <button
+        onClick={handlePayment}
+        style={{
+          padding: "10px",
+          background: "blue",
+          color: "white",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        Pay Now
+      </button>
     </div>
   );
 }

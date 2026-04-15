@@ -11,7 +11,7 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
-  // ✅ ADD TO CART WITH QUANTITY
+
   const addToCart = (product) => {
     setCart((prevCart) => {
       const existing = prevCart.find((item) => item.id === product.id);
@@ -28,14 +28,14 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // ✅ REMOVE ITEM COMPLETELY
+  
   const removeFromCart = (id) => {
     setCart((prevCart) =>
       prevCart.filter((item) => item.id !== id)
     );
   };
 
-  // ✅ INCREASE
+
   const increaseQty = (id) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
@@ -46,7 +46,7 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  // ✅ DECREASE
+  
   const decreaseQty = (id) => {
     setCart((prevCart) =>
       prevCart.map((item) =>

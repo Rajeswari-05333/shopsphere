@@ -1,70 +1,41 @@
-import { useContext } from "react";
-import { CartContext } from "../context/CartContext";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import BASE_URL from "../config";
 
 function Cart() {
-  const { cart, removeFromCart, increaseQty, decreaseQty } = useContext(CartContext);
+  const [cartItems, setCartItems] = useState([]);
 
-  const total = cart.reduce(
-  (sum, item) => sum + item.price * item.quantity,
-  0
-);
+  useEffect(() => {
+    fetch(`${BASE_URL}/cart`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Cart Data:", data);
+        setCartItems(data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>🛒 Your Cart</h2>
+      <h1>Your Cart 🛒</h1>
 
-      {cart.length === 0 ? (
+      {cartItems.length === 0 ? (
         <p>No items in cart</p>
       ) : (
-        <>
-          {cart.map((item) => (
+        cartItems.map((item) => (
           <div
-            key={item.id}
+            key={item._id}
             style={{
-            border: "1px solid #ccc",
-            marginBottom: "10px",
-            padding: "10px",
-            borderRadius: "5px",
+              border: "1px solid #ccc",
+              margin: "10px 0",
+              padding: "10px",
             }}
-            >
-            <h4>{item.name}</h4>
+          >
+            <img src={item.image} width="100" />
+            <h3>{item.name}</h3>
             <p>₹{item.price}</p>
-
-            {/* 🔥 QUANTITY CONTROLS */}
-            <div style={{ marginBottom: "10px" }}>
-            <button onClick={() => decreaseQty(item.id)}>-</button>
-            <span style={{ margin: "0 10px" }}>{item.quantity}</span>
-            <button onClick={() => increaseQty(item.id)}>+</button>
+            <p>Qty: {item.quantity}</p>
           </div>
-
-          {/* ❌ REMOVE */}
-          <button onClick={() => removeFromCart(item.id)}>
-            Remove ❌
-          </button>
-        </div>
-      ))}
-
-          {/* ✅ TOTAL */}
-          <h3>Total: ₹{total}</h3>
-
-          {/* ✅ PAYMENT BUTTON */}
-          <Link to="/payment">
-            <button
-              style={{
-                padding: "10px",
-                marginTop: "10px",
-                background: "green",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-                borderRadius: "5px",
-              }}
-            >
-              Proceed to Payment
-            </button>
-          </Link>
-        </>
+        ))
       )}
     </div>
   );

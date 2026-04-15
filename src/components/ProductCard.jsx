@@ -1,56 +1,49 @@
-import { useContext } from "react";
-import { CartContext } from "../context/CartContext";
+import BASE_URL from "../config";
 
 function ProductCard({ product }) {
-  const { addToCart } = useContext(CartContext);
-  console.log("Context:", useContext(CartContext));
-  
+
+  const addToCart = async () => {
+    try {
+      await fetch(`${BASE_URL}/cart`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: product._id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          quantity: 1,
+        }),
+      });
+
+      alert("Added to cart ✅");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div
-  style={{
-    borderRadius: "12px",
-    overflow: "hidden",
-    background: "#fff",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-    transition: "0.3s",
-  }}
->
-  <img
-    src={product.image}
-    alt={product.name}
-    style={{
-    width: "100%",
-    height: "180px",
-    objectFit: "cover",
-    borderTopLeftRadius: "12px",
-    borderTopRightRadius: "12px"
-    }}
-    onError={(e) => {
-    e.target.src = "https://via.placeholder.com/200";
-    }}
-  />
+    <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+      <img src={product.image} alt="" width="100%" />
+      <h3>{product.name}</h3>
+      <p>₹{product.price}</p>
 
-  <div style={{ padding: "10px" }}>
-    <h3>{product.name}</h3>
-    <p>₹{product.price}</p>
-    <p>⭐ {product.rating}</p>
-
-    <button
-      onClick={() => addToCart(product)}
-      style={{
-        width: "100%",
-        padding: "10px",
-        background: "#007bff",
-        color: "#fff",
-        border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
-      }}
-    >
-      Add to Cart
-    </button>
-  </div>
-</div>
+      <button
+        onClick={addToCart}
+        style={{
+          marginTop: "10px",
+          padding: "8px",
+          background: "black",
+          color: "white",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        Add to Cart 🛒
+      </button>
+    </div>
   );
 }
 
